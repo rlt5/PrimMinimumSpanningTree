@@ -46,7 +46,7 @@ public class PrimMinimumSpanningTree {
 
     public PrimMinimumSpanningTree(AdjacencyList list, int root) {
         ArrayList<Vertex> vertices = list.getVertices();
-        int[][] weights = graph.getWeights();
+//        int[][] weights = graph.getWeights();
         for (Vertex u : vertices){
             u.setKey(Integer.MAX_VALUE);
             u.parent = null;

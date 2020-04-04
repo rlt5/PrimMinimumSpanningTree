@@ -43,7 +43,8 @@ public class Main {
 
 
         AdjacencyList adjacencyList = new AdjacencyList(9);
-        adjacencyList.addNode(0,1,4);
+        adjacencyList.adjacencyList[0].add(new AdjacencyList.LLNode(1,4,0));
+//                (0,1,4);
         adjacencyList.addNode(0,7,8);
         adjacencyList.addNode(1,7,11);
         adjacencyList.addNode(1,2,8);
@@ -59,6 +60,7 @@ public class Main {
         adjacencyList.addNode(7,8,7);
 
         adjacencyList.print();
+
 
     }
 }
