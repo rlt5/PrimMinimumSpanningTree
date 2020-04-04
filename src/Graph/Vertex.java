@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Vertex {
     public int index;
-    private int key;
+    public int key;
     public Vertex parent;
 
     public Vertex() {

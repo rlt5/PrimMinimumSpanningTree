@@ -12,25 +12,24 @@ public class AdjacencyList {
     // Constructor
     public AdjacencyList(int numberOfVertices) {
         adjacencyList = new LinkedList[numberOfVertices];
+        vertices = new ArrayList<>();
         for ( int i = 0; i < numberOfVertices; i++){
             adjacencyList[i] = new LinkedList<Edge>();
             vertices.add(new Vertex(i));
         }
         this.numberOfVertices = numberOfVertices;
     }
+    public void add(int parentIndex, int index, int weight ){
+        adjacencyList[parentIndex].add(new Edge(parentIndex,index,weight));
+        adjacencyList[index].add(new Edge(index,parentIndex,weight));
+    }
 
     public void print(){
 //        Edge tempNode;
-        for ( LinkedList<Edge> Edge : adjacencyList){
-            System.out.print("Vertex " );
-            Edge.forEach((temp) -> {
-                        System.out.print("-> " + temp.index);
-                    });
-//            tempNode = Edge;
-//            while ( tempNode != null ) {
-//                System.out.print(" " + tempNode.index + " -> ");
-//                tempNode = tempNode.nextNode;
-//            }
+        for ( int i = 0; i < numberOfVertices; i++ ){
+            System.out.print("Vertex " + i);
+            adjacencyList[i].forEach((temp) -> {
+                        System.out.print("-> " + temp.index); });
             System.out.println();
         }
     }
