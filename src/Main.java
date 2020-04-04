@@ -1,3 +1,4 @@
+import Graph.AdjacencyList;
 import Graph.AdjacencyMatrix;
 import Graph.Edge;
 import Graph.Vertex;
@@ -39,5 +40,25 @@ public class Main {
         System.out.println("Execution time of Prim is: " + String.format("%.6f", (float)totalTime/1000000) + "ms");
 
         Prim.minSpanningTree.print();
+
+
+        AdjacencyList adjacencyList = new AdjacencyList(9);
+        adjacencyList.addNode(0,1,4);
+        adjacencyList.addNode(0,7,8);
+        adjacencyList.addNode(1,7,11);
+        adjacencyList.addNode(1,2,8);
+        adjacencyList.addNode(2,3,7);
+        adjacencyList.addNode(2,5,4);
+        adjacencyList.addNode(2,8,2);
+        adjacencyList.addNode(3, 4, 9);
+        adjacencyList.addNode(3,5,14);
+        adjacencyList.addNode(4,5,10);
+        adjacencyList.addNode(5,6,2);
+        adjacencyList.addNode(6,7,1);
+        adjacencyList.addNode(6,8,6);
+        adjacencyList.addNode(7,8,7);
+
+        adjacencyList.print();
+
     }
 }
