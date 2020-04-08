@@ -25,7 +25,6 @@ public class AdjacencyList {
     }
 
     public void print(){
-//        Edge tempNode;
         for ( int i = 0; i < numberOfVertices; i++ ){
             System.out.print("Vertex " + i);
             adjacencyList[i].forEach((temp) -> {

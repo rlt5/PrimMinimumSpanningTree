@@ -4,6 +4,8 @@ import Graph.Edge;
 import Graph.Vertex;
 import MinimumSpanningTree.PrimMinimumSpanningTree;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
@@ -25,14 +27,40 @@ public class Main {
             n = rand.nextInt(numberOfVertices);
             m = rand.nextInt(numberOfVertices);
             w = rand.nextInt(maxWeight);
-            while ( n == m || adjacencyMatrix.getWeights()[n][m] > 0)
+            while ( n == m || adjacencyMatrix.getWeights()[n][m] > 0) {
                 m = rand.nextInt(numberOfVertices);
+                n = rand.nextInt(numberOfVertices);
+            }
             adjacencyMatrix.setWeights(n,m,w);
         }
         return adjacencyMatrix;
     }
 
-    public static void main(String[] args){
+    public static AdjacencyList randomAdjList(int numberOfVertices, int numberOfEdges, int maxWeight){
+        AdjacencyList adjacencyList = new AdjacencyList( numberOfVertices );
+        Random rand = new Random();
+        int n,m,w;
+        w = rand.nextInt(maxWeight);
+        for ( int i = 0; i < numberOfVertices; i++){
+            n = rand.nextInt(numberOfVertices);
+            while ( n == i || adjacencyList.adjacencyList[i].contains(n) )
+                n = rand.nextInt(numberOfVertices);
+            adjacencyList.add(i, n, w);
+        }
+        numberOfEdges = numberOfEdges - numberOfVertices;
+        while ( numberOfEdges > 0 ){
+            n = rand.nextInt(numberOfVertices);
+            m = rand.nextInt(numberOfVertices);
+            w = rand.nextInt(maxWeight);
+            if ( n != m && !adjacencyList.adjacencyList[n].contains(m) ) {
+                adjacencyList.add(n, m, w);
+                numberOfEdges--;
+            }
+        }
+        return adjacencyList;
+    }
+
+    public static void main(String[] args) throws IOException {
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(9);
         adjacencyMatrix.setWeights(0,1,4);
         adjacencyMatrix.setWeights(0,7,8);
@@ -89,12 +117,12 @@ public class Main {
         totalTime = endTime - startTime;
         System.out.println("Execution time of Prim LinkedList is: " + String.format("%.6f", (float)totalTime/1000000) + "ms");
         PrimLinkedList.minSpanningTreeList.print();
-
+        int iterations = 1000;
         ArrayList<Integer> n = new ArrayList<>();
         n.add(100);
-//        n.add(200);
-//        n.add(400);
-//        n.add(800);
+        n.add(200);
+        n.add(400);
+        n.add(800);
 
         ArrayList<Integer>[] m = new ArrayList[n.size()];
         int x;
@@ -103,7 +131,7 @@ public class Main {
             m[i] = new ArrayList<>();
             m[i].add( 3*x);
             m[i].add( (int)( Math.pow(x,1.5)) );
-            m[i].add( (int)( x*(x-1)/2) );
+            m[i].add( x*(x-1)/2 );
         }
 
         ArrayList<Long>[] timeResults = new ArrayList[n.size()];
@@ -111,34 +139,75 @@ public class Main {
         for ( int i = 0; i < n.size(); i++ ){
             numberOfVertices = n.get(i);
             timeResults[i] = new ArrayList<>();
+            iterations = 1000;
+            if ( i < 2 ){
+                iterations = 10000;
+            }
             for ( Integer numberOfEdges : m[i] ){
-                adjacencyMatrix = randomAdjMatrix(numberOfVertices, numberOfEdges, numberOfVertices/2);
-                startTime = System.nanoTime();
-                Prim = new PrimMinimumSpanningTree(adjacencyMatrix,0);
-                endTime = System.nanoTime();
-                totalTime = endTime - startTime;
-                timeResults[i].add(totalTime);
+                long diffTime;
+                totalTime = (long)0;
+                for (int iter = 0; iter < iterations; iter++) {
+                    AdjacencyMatrix am = randomAdjMatrix(numberOfVertices, numberOfEdges, numberOfVertices / 2);
+                    startTime = System.nanoTime();
+                    Prim = new PrimMinimumSpanningTree(am, 0);
+                    endTime = System.nanoTime();
+                    diffTime = endTime - startTime;
+                    totalTime += diffTime;
+                }
+                timeResults[i].add(totalTime/iterations);
             }
-
         }
-//
-//        for ( int i = 0; i < n.size(); i++ ){
-//            System.out.print("n = " + n.get(i));
-//            for ( Integer y: m[i]){
-//                System.out.print( " m = " + y);
-//            }
-//            System.out.println();
-//        }
 
-        for ( int i = 0; i < n.size(); i++ ){
-            System.out.print("n = " + n.get(i));
-            for ( Long y: timeResults[i]){
-                System.out.print( " " + String.format("%.6f", (float)y/1000000) + "ms");
+        FileWriter writer = new FileWriter("C:\\Users\\robin\\Google Drive\\SFU\\Computing Science\\CMPT 307\\Qianping Gu Spring 2020\\Assignments\\Assignment 7\\primMatrixResults.csv");
+        writer.append(String.valueOf("n,3n,n^1,n(n-1)/2\n"));
+        for ( int row = 0; row < n.size(); row++ ){
+            System.out.print("n = " + n.get(row));
+            writer.append(String.valueOf(n.get(row)));
+            writer.append(",");
+            for ( int col = 0; col < m[0].size(); col++){
+                System.out.print( "\t | m = " + String.format("%6d", m[row].get(col)) + String.format("\t%2.3f", (float)timeResults[row].get(col)/1000000) + "ms\t" );
+                writer.append(String.format("\t%2.3f", (float)timeResults[row].get(col)/1000000));
+                writer.append(",");
             }
+            writer.append("\n");
             System.out.println();
         }
+        writer.close();
+
+//        ArrayList<Long>[] timeResults2 = new ArrayList[n.size()];
+//        int numberOfVertices2;
+//        for ( int i = 0; i < n.size(); i++ ){
+//            numberOfVertices2 = n.get(i);
+//            timeResults2[i] = new ArrayList<>();
+//            for ( Integer numberOfEdges : m[i] ){
+//                long diffTime;
+//                totalTime = (long)0;
+//                for (int iter = 0; iter < iterations; iter++) {
+//                    AdjacencyList am = randomAdjList(numberOfVertices2, numberOfEdges, numberOfVertices2 / 2);
+//                    startTime = System.nanoTime();
+//                    Prim = new PrimMinimumSpanningTree(am, 0);
+//                    endTime = System.nanoTime();
+//                    diffTime = endTime - startTime;
+//                    totalTime += diffTime;
+//                }
+//                timeResults2[i].add(totalTime/iterations);
+//            }
+//        }
+//
+//        writer = new FileWriter("C:\\Users\\robin\\Google Drive\\SFU\\Computing Science\\CMPT 307\\Qianping Gu Spring 2020\\Assignments\\Assignment 7\\primListResults.csv");
+//        writer.append(String.valueOf("n,3n,n^1,n(n-1)/2\n"));
+//        for ( int row = 0; row < n.size(); row++ ){
+//            System.out.print("n = " + n.get(row));
+//            writer.append(String.valueOf(n.get(row)));
+//            writer.append(",");
+//            for ( int col = 0; col < m[0].size(); col++){
+//                System.out.print( "\t | m = " + String.format("%6d", m[row].get(col)) + String.format("\t%2.3f", (float)timeResults2[row].get(col)/1000000) + "ms\t" );
+//                writer.append(String.format("\t%2.3f", (float)timeResults2[row].get(col)/1000000));
+//                writer.append(",");
+//            }
+//            writer.append("\n");
+//            System.out.println();
+//        }
+//        writer.close();
     }
-
-
-
 }

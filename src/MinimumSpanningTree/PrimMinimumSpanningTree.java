@@ -6,9 +6,7 @@ import Graph.Edge;
 import Graph.Vertex;
 
 import java.lang.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class PrimMinimumSpanningTree {
@@ -16,6 +14,7 @@ public class PrimMinimumSpanningTree {
     public AdjacencyList minSpanningTreeList;
 
     public PrimMinimumSpanningTree(AdjacencyMatrix graph, int root) {
+
         ArrayList<Vertex> vertices = graph.getVertices();
         int[][] weights = graph.getWeights();
         for (Vertex u : vertices){
@@ -26,22 +25,27 @@ public class PrimMinimumSpanningTree {
         PriorityQueue<Vertex> Q = new PriorityQueue<>(new Vertex.VertexComparator());
         Q.addAll(vertices);
         Vertex u;
+        int uIndex,vIndex;
         while ( !Q.isEmpty() ){
             u = Q.poll();
+            uIndex = u.index;
             for (Vertex v : vertices){
-                if ( weights[v.index][u.index] > 0 ){
-                    if ( Q.contains(v) && weights[u.index][v.index] < v.getKey() ){
+                vIndex = v.index;
+                if ( weights[vIndex][uIndex] > 0 ){
+                    if ( Q.contains(v) && weights[uIndex][vIndex] < v.getKey() ){
                         Q.remove(v);
                         v.parent = u;
-                        v.setKey(weights[u.index][v.index]);
+                        v.setKey(weights[uIndex][vIndex]);
                         Q.add(v);
                     }
                 }
             }
         }
         this.minSpanningTree = new AdjacencyMatrix(graph.numberOfVertices);
+        int parentIndex;
         for ( int i = 1; i < graph.numberOfVertices; i++){ // i starts at 1 because node 0/root has no parent
-            this.minSpanningTree.setWeights(i,vertices.get(i).parent.index,weights[i][vertices.get(i).parent.index]);
+            parentIndex = vertices.get(i).parent.index;
+            this.minSpanningTree.setWeights(i,parentIndex,weights[i][parentIndex]);
         }
     }
 
@@ -71,10 +75,9 @@ public class PrimMinimumSpanningTree {
                 }
             }
         }
-//
+
         this.minSpanningTreeList = new AdjacencyList(graph.numberOfVertices);
         for ( int i = 1; i < graph.numberOfVertices; i++){ // i starts at 1 because node 0/root has no parent
-//            System.out.println("vertex parent i = " + vertices.get(i).parent);
             this.minSpanningTreeList.add(vertices.get(i).parent.index, i, vertices.get(i).key);
         }
     }

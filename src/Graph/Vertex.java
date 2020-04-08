@@ -9,7 +9,7 @@ public class Vertex {
 
     public Vertex() {
         this.index = 0;
-        this.key = 0;
+        this.key = Integer.MAX_VALUE;
         this.parent = null;
     }
 
