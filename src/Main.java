@@ -14,23 +14,26 @@ public class Main {
     public static AdjacencyMatrix randomAdjMatrix(int numberOfVertices, int numberOfEdges, int maxWeight){
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix( numberOfVertices );
         Random rand = new Random();
-        int n,m,w;
-        for ( int i = 0; i < numberOfVertices; i++){
-            n = rand.nextInt(numberOfVertices);
-            while ( n == i || adjacencyMatrix.getWeights()[n][i] > 0)
-                n = rand.nextInt(numberOfVertices);
-            adjacencyMatrix.setWeights(i,n,4);
+        int vertexSrc, vertexDest, weight;
+
+        // Create a connected graph
+        for ( vertexSrc = 0; vertexSrc < numberOfVertices; vertexSrc++){
+            vertexDest = rand.nextInt(numberOfVertices);
+            while ( vertexSrc == vertexDest || adjacencyMatrix.getWeights()[vertexSrc][vertexDest] > 0)
+                vertexDest = rand.nextInt(numberOfVertices);
+            adjacencyMatrix.setWeights(vertexSrc, vertexDest,4);
         }
         numberOfEdges = numberOfEdges - numberOfVertices;
-        for  ( ; numberOfEdges > 0; numberOfEdges-- ){
-            n = rand.nextInt(numberOfVertices);
-            m = rand.nextInt(numberOfVertices);
-            w = rand.nextInt(maxWeight);
-            while ( n == m || adjacencyMatrix.getWeights()[n][m] > 0) {
-                m = rand.nextInt(numberOfVertices);
-                n = rand.nextInt(numberOfVertices);
+
+        // Create random edges
+        while ( numberOfEdges > 0 ){
+            vertexSrc = rand.nextInt(numberOfVertices);
+            vertexDest = rand.nextInt(numberOfVertices);
+            if ( vertexSrc != vertexDest && adjacencyMatrix.getWeights()[vertexSrc][vertexDest] > 0) {
+                weight = rand.nextInt(maxWeight);
+                adjacencyMatrix.setWeights(vertexSrc, vertexDest, weight);
+                numberOfEdges--;
             }
-            adjacencyMatrix.setWeights(n,m,w);
         }
         return adjacencyMatrix;
     }
@@ -54,8 +57,8 @@ public class Main {
         while ( numberOfEdges > 0 ){
             vertexSrc = rand.nextInt(numberOfVertices);
             vertexDest = rand.nextInt(numberOfVertices);
-            weight = rand.nextInt(maxWeight);
             if ( vertexSrc != vertexDest && !adjacencyList.adjacencyList[vertexSrc].contains(vertexDest) ) {
+                weight = rand.nextInt(maxWeight);
                 adjacencyList.add(vertexSrc, vertexDest, weight);
                 numberOfEdges--;
             }
