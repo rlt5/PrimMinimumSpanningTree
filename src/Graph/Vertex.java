@@ -30,9 +30,6 @@ public class Vertex {
     public void setKey(int key) {
         this.key = key;
     }
-//    public Vertex[] adjacentVertices;
-//    private weight
-
 
     public static class VertexComparator implements Comparator<Vertex> {
     // Overriding compare()method of Comparator
