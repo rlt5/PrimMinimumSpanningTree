@@ -29,7 +29,7 @@ public class Main {
         while ( numberOfEdges > 0 ){
             vertexSrc = rand.nextInt(numberOfVertices);
             vertexDest = rand.nextInt(numberOfVertices);
-            if ( vertexSrc != vertexDest && adjacencyMatrix.getWeights()[vertexSrc][vertexDest] > 0) {
+            if ( vertexSrc != vertexDest && adjacencyMatrix.getWeights()[vertexSrc][vertexDest] == 0) {
                 weight = rand.nextInt(maxWeight);
                 adjacencyMatrix.setWeights(vertexSrc, vertexDest, weight);
                 numberOfEdges--;
@@ -66,40 +66,22 @@ public class Main {
         return adjacencyList;
     }
 
-    public static void adjacencyMatrixTest(){
-        int iterations = 1000;
-        ArrayList<Integer> n = new ArrayList<>();
-        n.add(100);
-        n.add(200);
-        n.add(400);
-        n.add(800);
-
-        ArrayList<Integer>[] m = new ArrayList[n.size()];
-        int x;
-        for ( int i = 0; i < n.size(); i++ ){
-            x = n.get(i);
-            m[i] = new ArrayList<>();
-            m[i].add( 3*x);
-            m[i].add( (int)( Math.pow(x,1.5)) );
-            m[i].add( x*(x-1)/2 );
-        }
-
-        ArrayList<Long>[] timeResults = new ArrayList[n.size()];
+    public static ArrayList<Long>[] adjacencyMatrixTest(int iterations,
+                                           ArrayList<Integer> vertices,
+                                           ArrayList<Integer>[] edges,
+                                           String fileName) throws IOException {
+        long totalTime, startTime, endTime, diffTime;
+        ArrayList<Long>[] timeResults = new ArrayList[vertices.size()];
         int numberOfVertices;
-        for ( int i = 0; i < n.size(); i++ ){
-            numberOfVertices = n.get(i);
+        for ( int i = 0; i < vertices.size(); i++ ){
+            numberOfVertices = vertices.get(i);
             timeResults[i] = new ArrayList<>();
-            iterations = 1000;
-            if ( i < 2 ){
-                iterations = 10000;
-            }
-            for ( Integer numberOfEdges : m[i] ){
-                long diffTime;
+            for ( Integer numberOfEdges : edges[i] ){
                 totalTime = (long)0;
                 for (int iter = 0; iter < iterations; iter++) {
                     AdjacencyMatrix am = randomAdjMatrix(numberOfVertices, numberOfEdges, numberOfVertices / 2);
                     startTime = System.nanoTime();
-                    Prim = new PrimMinimumSpanningTree(am, 0);
+                    PrimMinimumSpanningTree Prim = new PrimMinimumSpanningTree(am, 0);
                     endTime = System.nanoTime();
                     diffTime = endTime - startTime;
                     totalTime += diffTime;
@@ -108,21 +90,22 @@ public class Main {
             }
         }
 
-        FileWriter writer = new FileWriter("C:\\Users\\robin\\Google Drive\\SFU\\Computing Science\\CMPT 307\\Qianping Gu Spring 2020\\Assignments\\Assignment 7\\primMatrixResults.csv");
+        FileWriter writer = new FileWriter( fileName );
         writer.append(String.valueOf("n,3n,n^1,n(n-1)/2\n"));
-        for ( int row = 0; row < n.size(); row++ ){
-            System.out.print("n = " + n.get(row));
-            writer.append(String.valueOf(n.get(row)));
+        for ( int row = 0; row < vertices.size(); row++ ){
+//            System.out.print("n = " + vertices.get(row));
+            writer.append(String.valueOf(vertices.get(row)));
             writer.append(",");
-            for ( int col = 0; col < m[0].size(); col++){
-                System.out.print( "\t | m = " + String.format("%6d", m[row].get(col)) + String.format("\t%2.3f", (float)timeResults[row].get(col)/1000000) + "ms\t" );
+            for ( int col = 0; col < edges[0].size(); col++){
+//                System.out.print( "\t | m = " + String.format("%6d", edges[row].get(col)) + String.format("\t%2.3f", (float)timeResults[row].get(col)/1000000) + "ms\t" );
                 writer.append(String.format("\t%2.3f", (float)timeResults[row].get(col)/1000000));
                 writer.append(",");
             }
             writer.append("\n");
-            System.out.println();
+//            System.out.println();
         }
         writer.close();
+        return timeResults;
     }
 
 
@@ -149,7 +132,7 @@ public class Main {
 //            System.out.println("Edge: " + edgeList.get(i).vertex1 + "-" + edgeList.get(i).vertex2 + " with Weight: " + edgeList.get(i).weight);
 //        }
 
-        ArrayList<Vertex> vertices = adjacencyMatrix.getVertices();
+//        ArrayList<Vertex> vertices = adjacencyMatrix.getVertices();
 
         Long startTime = System.nanoTime();
         PrimMinimumSpanningTree Prim = new PrimMinimumSpanningTree(adjacencyMatrix,0);
@@ -184,6 +167,26 @@ public class Main {
         System.out.println("Execution time of Prim LinkedList is: " + String.format("%.6f", (float)totalTime/1000000) + "ms");
         PrimLinkedList.minSpanningTreeList.print();
 
+        int iterations = 1000;
+        ArrayList<Integer> vertices = new ArrayList<>();
+        vertices.add(100);
+        vertices.add(200);
+        vertices.add(400);
+        vertices.add(800);
+
+        ArrayList<Integer>[] edges = new ArrayList[vertices.size()];
+        int tempVertex;
+        for ( int i = 0; i < vertices.size(); i++ ){
+            tempVertex = vertices.get(i);
+            edges[i] = new ArrayList<>();
+            edges[i].add( 3*tempVertex);
+            edges[i].add( (int)( Math.pow(tempVertex,1.5)) );
+            edges[i].add( tempVertex*(tempVertex-1)/2 );
+        }
+        String fileName = "C:\\Users\\robin\\Google Drive\\SFU\\Computing Science\\CMPT 307\\Qianping Gu Spring 2020\\Assignments\\Assignment 7\\primMatrixResults.csv";
+        ArrayList<Long>[] timeResults = adjacencyMatrixTest(10, vertices, edges, fileName );
+//        AdjacencyMatrix am = randomAdjMatrix(10, 20, 10);
+//        am.print();
 
 //        ArrayList<Long>[] timeResults2 = new ArrayList[n.size()];
 //        int numberOfVertices2;
