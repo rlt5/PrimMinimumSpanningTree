@@ -2,6 +2,7 @@ import BellmanFord.BellmanFord;
 import Graph.AdjacencyList;
 import Graph.AdjacencyMatrix;
 import Graph.Vertex;
+import LongestPathOrderedGraph.LongestPathOrderedGraph;
 import MinimumSpanningTree.PrimMinimumSpanningTree;
 
 import java.io.FileWriter;
@@ -260,6 +261,22 @@ public class Main {
 
         BellmanFord bellmanFord652 = new BellmanFord(adjacencyMatrixShortestPathTextbook652, 0);
         bellmanFord652.print();
+
+        AdjacencyMatrix adjacencyMatrixLongestPath = new AdjacencyMatrix(5);
+        adjacencyMatrixLongestPath.setDiGraphWeights(0,1,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(0,2,3);
+        adjacencyMatrixLongestPath.setDiGraphWeights(0,3,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(0,4,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(1,2,4);
+        adjacencyMatrixLongestPath.setDiGraphWeights(1,3,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(1,4,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(2,3,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(2,4,1);
+        adjacencyMatrixLongestPath.setDiGraphWeights(3,4,1);
+        adjacencyMatrixLongestPath.print();
+        LongestPathOrderedGraph longestPathOrderedGraph = new LongestPathOrderedGraph(adjacencyMatrixLongestPath);
+        System.out.println(longestPathOrderedGraph.count);
+
 
     }
 }
