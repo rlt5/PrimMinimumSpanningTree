@@ -254,7 +254,7 @@ public class Main {
         adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(2,1,-2);
         adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(3,2,-3);
         adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(3,4,9);
-        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(4,0,2);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(4,0,1);
         adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(4,2,7);
         adjacencyMatrixShortestPathTextbook652.print();
 

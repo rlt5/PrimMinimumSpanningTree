@@ -16,7 +16,7 @@ public class BellmanFord {
     public BellmanFord(AdjacencyMatrix adjacencyMatrix, int root){
         this.adjacencyMatrix = adjacencyMatrix;
         if (!shortestPath(adjacencyMatrix, root))
-            System.out.println("failed");
+            System.out.println("===== FAILED - Negative cycles are reachable from source node s =====");
     }
 
     public Boolean shortestPath(AdjacencyMatrix graph, int root){
@@ -45,6 +45,7 @@ public class BellmanFord {
             this.print();
         }
         System.out.println("======================");
+        System.out.println();
         for ( Vertex u2 : vertices){
             for (Vertex v : vertices){
                 if ( weights[u2.index][v.index] > 0 ) {
