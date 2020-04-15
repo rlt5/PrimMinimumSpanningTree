@@ -1,5 +1,7 @@
+import BellmanFord.BellmanFord;
 import Graph.AdjacencyList;
 import Graph.AdjacencyMatrix;
+import Graph.Vertex;
 import MinimumSpanningTree.PrimMinimumSpanningTree;
 
 import java.io.FileWriter;
@@ -19,7 +21,7 @@ public class Main {
             vertexDest = rand.nextInt(numberOfVertices);
             while ( vertexSrc == vertexDest || adjacencyMatrix.getWeights()[vertexSrc][vertexDest] > 0)
                 vertexDest = rand.nextInt(numberOfVertices);
-            adjacencyMatrix.setWeights(vertexSrc, vertexDest,4);
+            adjacencyMatrix.setUndirectedWeights(vertexSrc, vertexDest,4);
         }
         numberOfEdges = numberOfEdges - numberOfVertices;
 
@@ -29,7 +31,7 @@ public class Main {
             vertexDest = rand.nextInt(numberOfVertices);
             if ( vertexSrc != vertexDest && adjacencyMatrix.getWeights()[vertexSrc][vertexDest] == 0) {
                 weight = rand.nextInt(maxWeight);
-                adjacencyMatrix.setWeights(vertexSrc, vertexDest, weight);
+                adjacencyMatrix.setUndirectedWeights(vertexSrc, vertexDest, weight);
                 numberOfEdges--;
             }
         }
@@ -148,20 +150,20 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(9);
-        adjacencyMatrix.setWeights(0,1,4);
-        adjacencyMatrix.setWeights(0,7,8);
-        adjacencyMatrix.setWeights(1,7,11);
-        adjacencyMatrix.setWeights(1,2,8);
-        adjacencyMatrix.setWeights(2,3,7);
-        adjacencyMatrix.setWeights(2,5,4);
-        adjacencyMatrix.setWeights(2,8,2);
-        adjacencyMatrix.setWeights(3, 4, 9);
-        adjacencyMatrix.setWeights(3,5,14);
-        adjacencyMatrix.setWeights(4,5,10);
-        adjacencyMatrix.setWeights(5,6,2);
-        adjacencyMatrix.setWeights(6,7,1);
-        adjacencyMatrix.setWeights(6,8,6);
-        adjacencyMatrix.setWeights(7,8,7);
+        adjacencyMatrix.setUndirectedWeights(0,1,4);
+        adjacencyMatrix.setUndirectedWeights(0,7,8);
+        adjacencyMatrix.setUndirectedWeights(1,7,11);
+        adjacencyMatrix.setUndirectedWeights(1,2,8);
+        adjacencyMatrix.setUndirectedWeights(2,3,7);
+        adjacencyMatrix.setUndirectedWeights(2,5,4);
+        adjacencyMatrix.setUndirectedWeights(2,8,2);
+        adjacencyMatrix.setUndirectedWeights(3, 4, 9);
+        adjacencyMatrix.setUndirectedWeights(3,5,14);
+        adjacencyMatrix.setUndirectedWeights(4,5,10);
+        adjacencyMatrix.setUndirectedWeights(5,6,2);
+        adjacencyMatrix.setUndirectedWeights(6,7,1);
+        adjacencyMatrix.setUndirectedWeights(6,8,6);
+        adjacencyMatrix.setUndirectedWeights(7,8,7);
 
         adjacencyMatrix.print();
 //        ArrayList<Edge> edgeList = adjacencyMatrix.getEdgeList();
@@ -206,10 +208,10 @@ public class Main {
 
         int iterations = 1000;
         ArrayList<Integer> vertices = new ArrayList<>();
-        vertices.add(100);
-        vertices.add(200);
-        vertices.add(400);
-        vertices.add(800);
+//        vertices.add(100);
+//        vertices.add(200);
+//        vertices.add(400);
+//        vertices.add(800);
 
         ArrayList<Integer>[] edges = new ArrayList[vertices.size()];
         int tempVertex;
@@ -225,6 +227,39 @@ public class Main {
 
         fileName = "C:\\Users\\robin\\Google Drive\\SFU\\Computing Science\\CMPT 307\\Qianping Gu Spring 2020\\Assignments\\Assignment 7\\primListResults.csv";
         ArrayList<Long>[] timeResultsList = adjacencyListTest(1, vertices, edges, fileName );
+
+        AdjacencyMatrix adjacencyMatrixShortestPath = new AdjacencyMatrix(5);
+        adjacencyMatrixShortestPath.setDiGraphWeights(0,1,3);
+        adjacencyMatrixShortestPath.setDiGraphWeights(0,3,5);
+        adjacencyMatrixShortestPath.setDiGraphWeights(1,2,6);
+        adjacencyMatrixShortestPath.setDiGraphWeights(1,3,2);
+        adjacencyMatrixShortestPath.setDiGraphWeights(2,4,2);
+        adjacencyMatrixShortestPath.setDiGraphWeights(3,1,1);
+        adjacencyMatrixShortestPath.setDiGraphWeights(3,2,4);
+        adjacencyMatrixShortestPath.setDiGraphWeights(3,4,6);
+        adjacencyMatrixShortestPath.setDiGraphWeights(4,0,3);
+        adjacencyMatrixShortestPath.setDiGraphWeights(4,2,7);
+
+        adjacencyMatrixShortestPath.print();
+
+        BellmanFord bellmanFord = new BellmanFord(adjacencyMatrixShortestPath, 0);
+        bellmanFord.print();
+
+        AdjacencyMatrix adjacencyMatrixShortestPathTextbook652 = new AdjacencyMatrix(5);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(0,1,6);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(0,3,7);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(1,2,5);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(1,3,8);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(1,4,-4);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(2,1,-2);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(3,2,-3);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(3,4,9);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(4,0,2);
+        adjacencyMatrixShortestPathTextbook652.setDiGraphWeights(4,2,7);
+        adjacencyMatrixShortestPathTextbook652.print();
+
+        BellmanFord bellmanFord652 = new BellmanFord(adjacencyMatrixShortestPathTextbook652, 0);
+        bellmanFord652.print();
 
     }
 }

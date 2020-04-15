@@ -45,7 +45,7 @@ public class PrimMinimumSpanningTree {
         int parentIndex;
         for ( int i = 1; i < graph.numberOfVertices; i++){ // i starts at 1 because node 0/root has no parent
             parentIndex = vertices.get(i).parent.index;
-            this.minSpanningTree.setWeights(i,parentIndex,weights[i][parentIndex]);
+            this.minSpanningTree.setUndirectedWeights(i,parentIndex,weights[i][parentIndex]);
         }
     }
 

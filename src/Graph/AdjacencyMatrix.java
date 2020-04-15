@@ -22,9 +22,14 @@ public class AdjacencyMatrix {
         return weights;
     }
 
-    public void setWeights(int index1, int index2, int weight) {
+    public void setUndirectedWeights(int index1, int index2, int weight) {
         this.weights[index1][index2] = weight;
         this.weights[index2][index1] = weight;
+        this.numberOfEdges++;
+    }
+
+    public void setDiGraphWeights(int index1, int index2, int weight) {
+        this.weights[index1][index2] = weight;
         this.numberOfEdges++;
     }
 
